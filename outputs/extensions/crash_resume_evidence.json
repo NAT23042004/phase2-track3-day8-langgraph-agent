@@ -1,0 +1,253 @@
+{
+  "database_path": "outputs/extensions/crash_resume.db",
+  "thread_id": "thread-S06_delete",
+  "interrupt_payload": {
+    "proposed_action": "Execute risky support action for request: Delete customer account after support verification",
+    "risk_level": "high"
+  },
+  "persisted_before_resume": {
+    "config": {
+      "configurable": {
+        "thread_id": "thread-S06_delete",
+        "checkpoint_ns": "",
+        "checkpoint_id": "1f14cebf-7cc3-6cb4-8003-70119df248ea"
+      }
+    },
+    "metadata": {
+      "source": "loop",
+      "step": 3,
+      "parents": {}
+    },
+    "created_at": "2026-05-11T03:46:18.357872+00:00",
+    "next_nodes": [
+      "approval"
+    ],
+    "tasks": [
+      [
+        "49040c49-eedc-00d2-5159-ae1eac671220",
+        "approval",
+        [
+          "__pregel_pull",
+          "approval"
+        ],
+        null,
+        [
+          "Interrupt(value={'proposed_action': 'Execute risky support action for request: Delete customer account after support verification', 'risk_level': 'high'}, id='cb955afac4594a739c26d580f7e3efea')"
+        ],
+        null,
+        null
+      ]
+    ],
+    "interrupts": [
+      "Interrupt(value={'proposed_action': 'Execute risky support action for request: Delete customer account after support verification', 'risk_level': 'high'}, id='cb955afac4594a739c26d580f7e3efea')"
+    ],
+    "values": {
+      "thread_id": "thread-S06_delete",
+      "scenario_id": "S06_delete",
+      "query": "Delete customer account after support verification",
+      "route": "risky",
+      "risk_level": "high",
+      "attempt": 0,
+      "max_attempts": 3,
+      "final_answer": null,
+      "pending_question": null,
+      "proposed_action": "Execute risky support action for request: Delete customer account after support verification",
+      "approval": null,
+      "evaluation_result": null,
+      "fanout_expected": 0,
+      "messages": [
+        "intake:Delete customer account after support ve"
+      ],
+      "tool_results": [],
+      "errors": [],
+      "events": [
+        {
+          "node": "intake",
+          "event_type": "completed",
+          "message": "query normalized",
+          "latency_ms": 0,
+          "metadata": {
+            "query_length": 50,
+            "scenario_id": "S06_delete"
+          }
+        },
+        {
+          "node": "classify",
+          "event_type": "completed",
+          "message": "route=risky",
+          "latency_ms": 0,
+          "metadata": {
+            "route": "risky",
+            "token_count": 6,
+            "risk_level": "high"
+          }
+        },
+        {
+          "node": "risky_action",
+          "event_type": "pending_approval",
+          "message": "approval required",
+          "latency_ms": 0,
+          "metadata": {
+            "risk_level": "high",
+            "proposed_action": "Execute risky support action for request: Delete customer account after support verification"
+          }
+        }
+      ]
+    }
+  },
+  "reviewer_decision": {
+    "approved": true,
+    "reviewer": "recovery-reviewer",
+    "comment": "resume after graph reconstruction"
+  },
+  "resumed_final_state": {
+    "thread_id": "thread-S06_delete",
+    "scenario_id": "S06_delete",
+    "query": "Delete customer account after support verification",
+    "route": "risky",
+    "risk_level": "high",
+    "attempt": 0,
+    "max_attempts": 3,
+    "final_answer": "I found: order workflow checked for 'Delete customer account after support verification'; customer profile reviewed for 'Delete customer account after support verification' Approval recorded by recovery-reviewer.",
+    "pending_question": null,
+    "proposed_action": "Execute risky support action for request: Delete customer account after support verification",
+    "approval": {
+      "approved": true,
+      "reviewer": "recovery-reviewer",
+      "comment": "resume after graph reconstruction"
+    },
+    "evaluation_result": "success",
+    "fanout_expected": 2,
+    "messages": [
+      "intake:Delete customer account after support ve"
+    ],
+    "tool_results": [
+      {
+        "status": "success",
+        "tool": "mock_order_lookup",
+        "attempt": 0,
+        "payload": {
+          "summary": "order workflow checked for 'Delete customer account after support verification'",
+          "route": "risky",
+          "approved": true
+        }
+      },
+      {
+        "status": "success",
+        "tool": "mock_profile_lookup",
+        "attempt": 0,
+        "payload": {
+          "summary": "customer profile reviewed for 'Delete customer account after support verification'",
+          "route": "risky",
+          "approved": true
+        }
+      }
+    ],
+    "errors": [],
+    "events": [
+      {
+        "node": "intake",
+        "event_type": "completed",
+        "message": "query normalized",
+        "latency_ms": 0,
+        "metadata": {
+          "query_length": 50,
+          "scenario_id": "S06_delete"
+        }
+      },
+      {
+        "node": "classify",
+        "event_type": "completed",
+        "message": "route=risky",
+        "latency_ms": 0,
+        "metadata": {
+          "route": "risky",
+          "token_count": 6,
+          "risk_level": "high"
+        }
+      },
+      {
+        "node": "risky_action",
+        "event_type": "pending_approval",
+        "message": "approval required",
+        "latency_ms": 0,
+        "metadata": {
+          "risk_level": "high",
+          "proposed_action": "Execute risky support action for request: Delete customer account after support verification"
+        }
+      },
+      {
+        "node": "approval",
+        "event_type": "interrupt_decision",
+        "message": "approved=True",
+        "latency_ms": 0,
+        "metadata": {
+          "approved": true,
+          "reviewer": "recovery-reviewer"
+        }
+      },
+      {
+        "node": "fanout_dispatch",
+        "event_type": "completed",
+        "message": "parallel tool fan-out prepared",
+        "latency_ms": 0,
+        "metadata": {
+          "expected_tools": 2,
+          "route": "risky"
+        }
+      },
+      {
+        "node": "tool_order",
+        "event_type": "completed",
+        "message": "order evidence gathered",
+        "latency_ms": 0,
+        "metadata": {
+          "tool": "mock_order_lookup",
+          "status": "success"
+        }
+      },
+      {
+        "node": "tool_profile",
+        "event_type": "completed",
+        "message": "profile evidence gathered",
+        "latency_ms": 0,
+        "metadata": {
+          "tool": "mock_profile_lookup",
+          "status": "success"
+        }
+      },
+      {
+        "node": "evaluate",
+        "event_type": "completed",
+        "message": "parallel tool results satisfactory",
+        "latency_ms": 0,
+        "metadata": {
+          "latest_status": "success",
+          "tool_result_count": 2,
+          "expected_count": 2
+        }
+      },
+      {
+        "node": "answer",
+        "event_type": "completed",
+        "message": "answer generated",
+        "latency_ms": 0,
+        "metadata": {
+          "used_tool": true,
+          "approval_observed": true
+        }
+      },
+      {
+        "node": "finalize",
+        "event_type": "completed",
+        "message": "workflow finished",
+        "latency_ms": 0,
+        "metadata": {
+          "route": "risky",
+          "attempt": 0
+        }
+      }
+    ]
+  },
+  "history_length_after_resume": 11
+}

@@ -1,0 +1,32 @@
+{
+  "database_path": "outputs/extensions/time_travel.db",
+  "thread_id": "thread-S02_tool",
+  "history_length": 9,
+  "selected_checkpoint": {
+    "metadata": {
+      "source": "loop",
+      "step": 6,
+      "parents": {}
+    },
+    "created_at": "2026-05-11T03:46:17.450190+00:00",
+    "next_nodes": [
+      "finalize"
+    ],
+    "event_nodes": [
+      "intake",
+      "classify",
+      "fanout_dispatch",
+      "tool_order",
+      "tool_profile",
+      "evaluate",
+      "answer"
+    ],
+    "state_values": {
+      "route": "tool",
+      "attempt": 0,
+      "tool_results_count": 2,
+      "fanout_expected": 2
+    }
+  },
+  "final_route": "tool"
+}

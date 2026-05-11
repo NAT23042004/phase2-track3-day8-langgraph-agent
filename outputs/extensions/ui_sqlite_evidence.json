@@ -1,0 +1,8 @@
+{
+  "database_path": "outputs/extensions/ui_sqlite.db",
+  "thread_id": "thread-94b2040f-8c84-4632-80d1-49d8c0ab4399",
+  "history_length": 9,
+  "journal_mode": "wal",
+  "final_route": "tool",
+  "final_answer": "I found: order workflow checked for 'Please lookup order status for order 12345'; customer profile reviewed for 'Please lookup order status for order 12345'"
+}

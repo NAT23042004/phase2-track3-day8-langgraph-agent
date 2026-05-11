@@ -1,0 +1,48 @@
+---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD;
+	__start__([<p>__start__</p>]):::first
+	intake(intake)
+	classify(classify)
+	answer(answer)
+	fanout_dispatch(fanout_dispatch)
+	tool(tool)
+	tool_order(tool_order)
+	tool_profile(tool_profile)
+	evaluate(evaluate)
+	clarify(clarify)
+	risky_action(risky_action)
+	approval(approval)
+	retry(retry)
+	dead_letter(dead_letter)
+	finalize(finalize)
+	__end__([<p>__end__</p>]):::last
+	__start__ --> intake;
+	answer --> finalize;
+	approval -.-> clarify;
+	approval -.-> fanout_dispatch;
+	clarify --> finalize;
+	classify -.-> answer;
+	classify -.-> clarify;
+	classify -.-> fanout_dispatch;
+	classify -.-> retry;
+	classify -.-> risky_action;
+	dead_letter --> finalize;
+	evaluate -.-> answer;
+	evaluate -.-> retry;
+	fanout_dispatch -.-> tool_order;
+	fanout_dispatch -.-> tool_profile;
+	intake --> classify;
+	retry -.-> dead_letter;
+	retry -.-> tool;
+	risky_action --> approval;
+	tool --> evaluate;
+	tool_order --> evaluate;
+	tool_profile --> evaluate;
+	finalize --> __end__;
+	classDef default fill:#f2f0ff,line-height:1.2
+	classDef first fill-opacity:0
+	classDef last fill:#bfb6fc
