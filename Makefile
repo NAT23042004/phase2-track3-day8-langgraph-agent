@@ -1,4 +1,4 @@
-.PHONY: install test lint typecheck run-scenarios grade-local export-graph demo-extensions streamlit-ui clean
+.PHONY: install test lint typecheck run-scenarios run-hidden-scenarios grade-local grade-hidden export-graph demo-extensions streamlit-ui clean
 
 PYTHON ?= $(if $(wildcard .venv/bin/python),.venv/bin/python,python3)
 
@@ -17,8 +17,17 @@ typecheck:
 run-scenarios:
 	$(PYTHON) -m langgraph_agent_lab.cli run-scenarios --config configs/lab.yaml --output outputs/metrics.json
 
+run-hidden-scenarios:
+	$(PYTHON) -m langgraph_agent_lab.cli run-scenarios --config configs/lab_hidden.yaml --output outputs/metrics_hidden.json
+
 grade-local:
 	$(PYTHON) -m langgraph_agent_lab.cli validate-metrics --metrics outputs/metrics.json
+
+grade-hidden:
+	$(PYTHON) -m langgraph_agent_lab.cli validate-metrics --metrics outputs/metrics_hidden.json
+
+grade-local-hidden:
+	$(PYTHON) -m langgraph_agent_lab.cli validate-metrics --metrics outputs/metrics.json --extended
 
 export-graph:
 	$(PYTHON) -m langgraph_agent_lab.cli export-graph --output outputs/extensions/graph.mmd
