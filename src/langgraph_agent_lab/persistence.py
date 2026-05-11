@@ -2,15 +2,13 @@
 
 from __future__ import annotations
 
+import sqlite3
+from pathlib import Path
 from typing import Any
 
 
 def build_checkpointer(kind: str = "memory", database_url: str | None = None) -> Any | None:
-    """Return a LangGraph checkpointer.
-
-    TODO(student): add SQLite/Postgres support for the extension track.
-    The starter uses MemorySaver so the lab can run without infrastructure.
-    """
+    """Return a LangGraph checkpointer."""
     if kind == "none":
         return None
     if kind == "memory":
@@ -21,12 +19,15 @@ def build_checkpointer(kind: str = "memory", database_url: str | None = None) ->
         try:
             from langgraph.checkpoint.sqlite import SqliteSaver
         except ImportError as exc:
-            raise RuntimeError("SQLite checkpointer requires: pip install langgraph-checkpoint-sqlite") from exc
-        return SqliteSaver.from_conn_string(database_url or "checkpoints.db")
-    if kind == "postgres":
-        try:
-            from langgraph.checkpoint.postgres import PostgresSaver
-        except ImportError as exc:
-            raise RuntimeError("Postgres checkpointer requires: pip install langgraph-checkpoint-postgres") from exc
-        return PostgresSaver.from_conn_string(database_url or "")
+            raise RuntimeError(
+                "SQLite checkpointer requires: "
+                "pip install langgraph-checkpoint-sqlite"
+            ) from exc
+
+        database_path = Path(database_url or "checkpoints.db")
+        database_path.parent.mkdir(parents=True, exist_ok=True)
+        conn = sqlite3.connect(database_path, check_same_thread=False)
+        conn.execute("PRAGMA journal_mode=WAL;")
+        conn.execute("PRAGMA synchronous=NORMAL;")
+        return SqliteSaver(conn=conn)
     raise ValueError(f"Unknown checkpointer kind: {kind}")

@@ -2,18 +2,17 @@
 
 from __future__ import annotations
 
+from langgraph.types import Send
+
 from .state import AgentState, Route
 
 
 def route_after_classify(state: AgentState) -> str:
-    """Map classified route to the next graph node.
-
-    TODO(student): handle unknown routes safely and update tests for edge cases.
-    """
+    """Map the classified route to the next graph node."""
     route = state.get("route", Route.SIMPLE.value)
     mapping = {
         Route.SIMPLE.value: "answer",
-        Route.TOOL.value: "tool",
+        Route.TOOL.value: "fanout_dispatch",
         Route.MISSING_INFO.value: "clarify",
         Route.RISKY.value: "risky_action",
         Route.ERROR.value: "retry",
@@ -22,30 +21,34 @@ def route_after_classify(state: AgentState) -> str:
 
 
 def route_after_retry(state: AgentState) -> str:
-    """Decide whether to retry, fallback, or dead-letter.
-
-    TODO(student): implement bounded retry and dead-letter routing.
-    """
+    """Route retries back to the tool or to dead-letter when exhausted."""
     if int(state.get("attempt", 0)) >= int(state.get("max_attempts", 3)):
         return "dead_letter"
     return "tool"
 
 
 def route_after_evaluate(state: AgentState) -> str:
-    """Decide whether tool result is satisfactory or needs retry.
-
-    This is the 'done?' check that enables retry loops — a key LangGraph advantage over LCEL.
-    TODO(student): replace heuristic with LLM-as-judge or structured validation.
-    """
+    """Route successful tool evaluations to answer and failures to retry."""
     if state.get("evaluation_result") == "needs_retry":
         return "retry"
     return "answer"
 
 
 def route_after_approval(state: AgentState) -> str:
-    """Continue only if approved.
-
-    TODO(student): support reject/edit outcomes.
-    """
+    """Continue only when approval is granted."""
     approval = state.get("approval") or {}
-    return "tool" if approval.get("approved") else "clarify"
+    return "fanout_dispatch" if approval.get("approved") else "clarify"
+
+
+def route_after_fanout_dispatch(state: AgentState) -> list[Send]:
+    """Send normal tool requests to both extension tool nodes."""
+    branch_state = {
+        "query": state.get("query", ""),
+        "route": state.get("route", ""),
+        "approval": state.get("approval"),
+        "attempt": state.get("attempt", 0),
+    }
+    return [
+        Send("tool_order", branch_state),
+        Send("tool_profile", branch_state),
+    ]

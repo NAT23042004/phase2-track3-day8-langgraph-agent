@@ -97,18 +97,18 @@ This helps you verify your routing handles cases beyond the 7 samples. The gradi
 ```bash
 # Option A: conda
 conda activate ai-lab
-pip install -e '.[dev]'
+pip install -e '.[dev,sqlite]'
 
 # Option B: venv
 python -m venv .venv
 source .venv/bin/activate
-pip install -e '.[dev]'
+pip install -e '.[dev,sqlite]'
 
 # Verify setup
 make test
 ```
 
-`pip install -e '.[dev]'` installs this project in editable mode with dev dependencies (pytest, ruff, mypy). Editable mode means code changes take effect immediately without reinstalling.
+`pip install -e '.[dev,sqlite]'` installs this project in editable mode with dev dependencies (pytest, ruff, mypy) plus SQLite checkpoint support. Editable mode means code changes take effect immediately without reinstalling.
 
 ---
 
